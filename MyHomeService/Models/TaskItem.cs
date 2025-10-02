@@ -1,4 +1,4 @@
-﻿namespace MyFirstBlazorApp.Models
+﻿namespace MyHomeService.Models
 {
     public class TaskItem
     {

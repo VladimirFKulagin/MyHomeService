@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MyFirstBlazorApp.Migrations
+namespace MyHomeService.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

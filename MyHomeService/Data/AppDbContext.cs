@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyFirstBlazorApp.Models;
+using MyHomeService.Models;
 
-namespace MyFirstBlazorApp.Data
+namespace MyHomeService.Data
 {
     public class AppDbContext : DbContext
     {

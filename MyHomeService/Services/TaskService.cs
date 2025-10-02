@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyFirstBlazorApp.Data;
-using MyFirstBlazorApp.Models;
+using MyHomeService.Data;
+using MyHomeService.Models;
 
-namespace MyFirstBlazorApp.Services
+namespace MyHomeService.Services
 {
     public class TaskService : ITaskService
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MyFirstBlazorApp.Migrations
+namespace MyHomeService.Migrations
 {
     /// <inheritdoc />
     public partial class RenameIsCompleted : Migration

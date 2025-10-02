@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyFirstBlazorApp.Data;
+using MyHomeService.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MyFirstBlazorApp.Migrations
+namespace MyHomeService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20251001063043_InitialCreate")]

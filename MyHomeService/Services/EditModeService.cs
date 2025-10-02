@@ -1,4 +1,4 @@
-﻿namespace MyFirstBlazorApp.Services
+﻿namespace MyHomeService.Services
 {
     public class EditModeService
     {

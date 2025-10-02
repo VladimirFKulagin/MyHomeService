@@ -1,6 +1,6 @@
-﻿using MyFirstBlazorApp.Models;
+﻿using MyHomeService.Models;
 
-namespace MyFirstBlazorApp.Services
+namespace MyHomeService.Services
 {
     public interface ITaskService
     {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MyFirstBlazorApp.Components;
-using MyFirstBlazorApp.Data;
-using MyFirstBlazorApp.Services;
+using MyHomeService.Components;
+using MyHomeService.Data;
+using MyHomeService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
