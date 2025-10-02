@@ -1,0 +1,101 @@
+﻿@page "/tasks"
+@rendermode InteractiveServer
+@using MyFirstBlazorApp.Models
+@using MyFirstBlazorApp.Services
+@inject ITaskService TaskService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject EditModeService EditModeService
+
+<h3>📋 Список задач</h3>
+
+@if (EditModeService.IsEditMode)
+{
+    <div class="mb-3">
+        <a href="/add-task" class="btn btn-primary">➕ Добавить новую задачу</a>
+    </div>
+}
+
+@if (tasks == null)
+{
+    <div class="alert alert-info">Загрузка задач...</div>
+}
+else if (!tasks.Any())
+{
+    <div class="alert alert-warning">Задачи не найдены. Добавьте первую задачу!</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var task in tasks)
+                {
+                    <tr>
+                        <td>@task.Title</td>
+                        <td>@task.Description</td>
+                        <td>
+                            <span class="badge @(task.IsCompleted ? "bg-success" : "bg-warning")">
+                                @(task.IsCompleted ? "✅ Выполнена" : "⏳ Активна")
+                            </span>
+                        </td>
+                        <td>
+                            @if (EditModeService.IsEditMode)
+                            {
+                                <a href="/edit-task/@task.Id" class="btn btn-primary btn-sm">✏️ Изменить</a>
+                                <button class="btn btn-danger btn-sm" @onclick="() => DeleteTask(task.Id)">🗑️ Удалить</button>
+                            }
+                            else
+                            {
+                                <button class="btn @(task.IsCompleted ? "btn-warning" : "btn-success") btn-sm"
+                                @onclick="() => ToggleComplete(task)">
+                                    @(task.IsCompleted ? "❌ Отменить" : "✅ Завершить")
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<TaskItem> tasks = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+        EditModeService.OnChange += StateHasChanged; // Подписываемся на изменения
+    }
+
+    private async Task LoadTasks()
+    {
+        tasks = await TaskService.GetTasksAsync();
+        tasks = tasks.OrderBy(t => t.Id).ToList();
+    }
+
+    private async Task DeleteTask(int id)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", "Вы уверены, что хотите удалить эту задачу?"))
+        {
+            await TaskService.DeleteTaskAsync(id);
+            await LoadTasks();
+        }
+    }
+
+    private async Task ToggleComplete(TaskItem task)
+    {
+        task.IsCompleted = !task.IsCompleted;
+        await TaskService.UpdateTaskAsync(task);
+        await LoadTasks();
+    }
+}

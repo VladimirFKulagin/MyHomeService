@@ -1,0 +1,225 @@
+﻿@page "/"
+
+@rendermode InteractiveServer
+@using MyFirstBlazorApp.Models
+@using MyFirstBlazorApp.Services
+@inject ITaskService TaskService
+
+<PageTitle>MyHome Service - Главная</PageTitle>
+
+<div class="home-container">
+    <!-- Hero секция -->
+    <div class="hero-section text-center text-white mb-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">🎮 MyHome Service</h1>
+            <p class="lead mb-4">Ваш персональный цифровой помощник для организации жизни</p>
+            <div class="hero-badge">
+                <span class="badge bg-primary fs-6 p-3">Управляйте задачами, книгами и медиа в одном месте</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Карточки сервисов -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="service-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon mb-3">
+                            <span class="display-1">📋</span>
+                        </div>
+                        <h3 class="card-title h5">Менеджер задач</h3>
+                        <p class="card-text">Организуйте свои дела, проекты и напоминания. Отслеживайте прогресс и повышайте продуктивность.</p>
+                        <a href="/tasks" class="btn btn-primary mt-2">Перейти к задачам</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="service-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon mb-3">
+                            <span class="display-1">📚</span>
+                        </div>
+                        <h3 class="card-title h5">Библиотека книг</h3>
+                        <p class="card-text">Каталогизируйте свою домашнюю библиотеку. Отслеживайте прочитанное и составляйте списки для чтения.</p>
+                        <a href="#" class="btn btn-outline-primary mt-2">Скоро доступно</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="service-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon mb-3">
+                            <span class="display-1">🎵</span>
+                        </div>
+                        <h3 class="card-title h5">Медиа коллекция</h3>
+                        <p class="card-text">Организуйте фильмы, музыку и игры. Создавайте персональные рекомендации и списки желаний.</p>
+                        <a href="#" class="btn btn-outline-primary mt-2">Скоро доступно</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <div class="stats-section p-4 rounded">
+                    <h2 class="h4 text-center mb-4">📊 Ваша активность</h2>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-primary">@activeTasksCount</div>
+                                <div class="stat-label">Активных задач</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-success">@completedTasksCount</div>
+                                <div class="stat-label">Выполнено задач</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-info">0</div>
+                                <div class="stat-label">Книг в коллекции</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number text-warning">0</div>
+                                <div class="stat-label">Медиа файлов</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Призыв к действию -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 ">
+                <div class="cta-section text-center p-5 rounded">
+                    <h2 class="h3 mb-3">Готовы начать?</h2>
+                    <p class="lead mb-4">Присоединяйтесь к тысячам пользователей, которые уже организовали свою жизнь с MyHome Service</p>
+                    <div class="cta-buttons">
+                        <a href="/tasks" class="btn btn-primary btn-lg me-3">🚀 Начать использовать</a>
+                        <a href="#" class="btn btn-outline-secondary btn-lg">📖 Узнать больше</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Пустое пространство внизу для футера -->
+    <div class="footer-space"></div>
+</div>
+
+
+@code
+{
+    private int activeTasksCount = 0;
+    private int completedTasksCount = 0;
+    //private int completionPercentage = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStatistics();
+    }
+    private async Task LoadStatistics()
+    {
+        var tasks = await TaskService.GetTasksAsync();
+        //var totalTasksCount = tasks.Count();
+        activeTasksCount = tasks.Count(task => !task.IsCompleted);
+        completedTasksCount = tasks.Count(task => task.IsCompleted);
+
+        /*completionPercentage = totalTasksCount > 0
+            ? (int)Math.Round((double)completedTasksCount / totalTasksCount * 100)
+            : 0;*/
+    }
+}
+
+
+<style>
+    .home-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-content {
+        flex: 1;
+    }
+
+    .footer-space {
+        height: 100px; /* Место для будущего футера */
+        background: transparent;
+    }
+
+    .hero-section {
+        padding: 100px 0 80px 0;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .service-card {
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+    .service-icon {
+        opacity: 0.9;
+    }
+
+    .stats-section {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cta-section {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-badge .badge {
+        background: rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn {
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+</style>

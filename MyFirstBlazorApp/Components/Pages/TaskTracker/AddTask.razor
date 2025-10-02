@@ -1,0 +1,50 @@
+﻿@page "/add-task"
+@rendermode InteractiveServer
+@using MyFirstBlazorApp.Models
+@using MyFirstBlazorApp.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject ITaskService TaskService
+@inject NavigationManager Navigation
+
+<h3>➕ Добавить новую задачу</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <EditForm Model="@newTask" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Название задачи</label>
+                <InputText id="title" @bind-Value="newTask.Title" class="form-control" />
+                <ValidationMessage For="@(() => newTask.Title)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание задачи</label>
+                <InputTextArea id="description" @bind-Value="newTask.Description" class="form-control" rows="4" />
+                <ValidationMessage For="@(() => newTask.Description)" />
+            </div>
+
+            <div class="mb-3 form-check">
+                <InputCheckbox id="isCompleted" @bind-Value="newTask.IsCompleted" class="form-check-input" />
+                <label for="isCompleted" class="form-check-label">Задача выполнена</label>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-success">💾 Сохранить</button>
+                <a href="/tasks" class="btn btn-secondary">❌ Отмена</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private TaskItem newTask = new();
+
+    private async Task HandleValidSubmit()
+    {
+        await TaskService.AddTaskAsync(newTask);
+        Navigation.NavigateTo("/tasks");
+    }
+}

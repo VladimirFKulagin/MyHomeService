@@ -1,0 +1,72 @@
+﻿@page "/edit-task/{id:int}"
+
+@rendermode InteractiveServer
+@using MyFirstBlazorApp.Models
+@using MyFirstBlazorApp.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject ITaskService TaskService
+@inject NavigationManager Navigation
+<h3>✏️ Редактирование задачи</h3>
+
+@if (task == null)
+{
+    <div class="alert alert-info">Загрузка...</div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm Model="@task" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Название задачи</label>
+                    <InputText id="title" @bind-Value="task.Title" class="form-control" />
+                    <ValidationMessage For="@(() => task.Title)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание задачи</label>
+                    <InputTextArea id="description" @bind-Value="task.Description" class="form-control" rows="4" />
+                    <ValidationMessage For="@(() => task.Description)" />
+                </div>
+
+                <div class="mb-3 form-check">
+                    <InputCheckbox id="isCompleted" @bind-Value="task.IsCompleted" class="form-check-input" />
+                    <label for="isCompleted" class="form-check-label">Задача выполнена</label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Сохранить изменения</button>
+                    <a href="/tasks" class="btn btn-secondary">❌ Отмена</a>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private TaskItem? task;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        task = await TaskService.GetTaskAsync(Id);
+
+        if (task == null)
+        {
+
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (task != null)
+        {
+            await TaskService.UpdateTaskAsync(task);
+            Navigation.NavigateTo("/tasks");
+        }
+    }
+}

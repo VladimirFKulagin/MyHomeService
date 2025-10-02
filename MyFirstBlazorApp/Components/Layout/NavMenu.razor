@@ -1,0 +1,57 @@
+﻿@rendermode InteractiveServer
+@using MyFirstBlazorApp.Services
+@inject EditModeService EditModeService
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">MyHome Service</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column d-flex flex-column h-100"> 
+        
+        <div class="flex-grow-1"> 
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="tasks" >
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> 📋 Задачи
+                </NavLink>
+            </div>
+
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="counter">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="weather">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                </NavLink>
+            </div>
+
+        </div>
+
+        
+        <div class="nav-item px-3 mt-auto pt-3 border-top border-secondary"> 
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="editModeSwitch"
+                       @bind="EditModeService.IsEditMode" />
+                <label class="form-check-label text-light" for="editModeSwitch">
+                    @(EditModeService.IsEditMode ? "🔧 Режим редактирования" : "👀 Режим просмотра")
+                </label>
+            </div>
+        </div>
+
+    </nav>
+</div>
