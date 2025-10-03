@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddScoped<EditModeService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<StatisticsService>();
 
 var app = builder.Build();
 

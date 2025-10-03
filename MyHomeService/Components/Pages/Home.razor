@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 @using MyHomeService.Models
 @using MyHomeService.Services
-@inject ITaskService TaskService
+@inject StatisticsService StatisticsService
 
 <PageTitle>MyHome Service - Главная</PageTitle>
 
@@ -71,13 +71,13 @@
                     <div class="row text-center">
                         <div class="col-md-3">
                             <div class="stat-item">
-                                <div class="stat-number text-primary">@activeTasksCount</div>
+                                <div class="stat-number text-primary">@statistics.ActiveTasksCount</div>
                                 <div class="stat-label">Активных задач</div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="stat-item">
-                                <div class="stat-number text-success">@completedTasksCount</div>
+                                <div class="stat-number text-success">@statistics.CompletedTasksCount</div>
                                 <div class="stat-label">Выполнено задач</div>
                             </div>
                         </div>
@@ -120,24 +120,11 @@
 
 @code
 {
-    private int activeTasksCount = 0;
-    private int completedTasksCount = 0;
-    //private int completionPercentage = 0;
+    public HomeStatistics statistics = new();
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadStatistics();
-    }
-    private async Task LoadStatistics()
-    {
-        var tasks = await TaskService.GetTasksAsync();
-        //var totalTasksCount = tasks.Count();
-        activeTasksCount = tasks.Count(task => !task.IsCompleted);
-        completedTasksCount = tasks.Count(task => task.IsCompleted);
-
-        /*completionPercentage = totalTasksCount > 0
-            ? (int)Math.Round((double)completedTasksCount / totalTasksCount * 100)
-            : 0;*/
+        statistics = await StatisticsService.GetHomeStatisticsAsync();
     }
 }
 
