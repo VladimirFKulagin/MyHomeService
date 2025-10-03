@@ -12,14 +12,12 @@ env:
 
 jobs:
   test:
-    name: Run Tests & Report
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -32,19 +30,15 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests with coverage and TRX logger
-      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage"
+    - name: Run tests
+      run: dotnet test --configuration Release --verbosity normal
 
-    - name: Publish Unit Test Results
+    - name: Upload test results
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: test-results
-        path: "**/TestResults/*.trx"
-        retention-days: 30
-
-    - name: Publish Coverage Reports
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-reports
-        path: "**/coverage.cobertura.xml"
+        path: |
+          **/TestResults/*.trx
+          **/coverage.cobertura.xml
         retention-days: 30
