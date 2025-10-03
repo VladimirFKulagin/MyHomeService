@@ -1,8 +1,8 @@
-name: .NET CI
+name: .NET Tests with Coverage
 
 on:
   push:
-    branches: [ main, master, develop, feature/* ]
+    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
 
@@ -11,12 +11,9 @@ env:
 
 jobs:
   test:
-    name: Run Tests on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        
+    name: Tests with Coverage
+    runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -26,26 +23,23 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-    - name: Cache NuGet packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
-          
     - name: Install dependencies
       run: dotnet restore
       
     - name: Build solution
-      run: dotnet build --no-restore --configuration Release --verbosity minimal
+      run: dotnet build --no-restore --configuration Release
       
-    - name: Run unit tests
-      run: dotnet test --no-build --verbosity normal --configuration Release --logger "trx;LogFileName=test-results.trx"
-      
-    - name: Upload test results
-      uses: actions/upload-artifact@v3
-      if: always()
+    - name: Run tests with coverage
+      run: |
+        dotnet test \
+          --no-build \
+          --configuration Release \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage
+          
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
       with:
-        name: test-results-${{ matrix.os }}
-        path: "**/TestResults/*.trx"
+        name: coverage-reports
+        path: coverage/**/*.xml
+        retention-days: 30
