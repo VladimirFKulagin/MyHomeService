@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using MyHomeService.Models;
 using MyHomeService.Services;
-using System.Threading.Tasks;
 
 namespace MyHomeService.Tests.Services
 {
