@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHomeService", "MyHomeService\MyHomeService.csproj", "{C8D97378-546B-4428-A820-CD3C72EB9C09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHomeService.Tests", "MyHomeService.Tests\MyHomeService.Tests.csproj", "{57EBAA41-4ACC-4A0C-83F4-23D736A8C348}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C8D97378-546B-4428-A820-CD3C72EB9C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8D97378-546B-4428-A820-CD3C72EB9C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8D97378-546B-4428-A820-CD3C72EB9C09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57EBAA41-4ACC-4A0C-83F4-23D736A8C348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57EBAA41-4ACC-4A0C-83F4-23D736A8C348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57EBAA41-4ACC-4A0C-83F4-23D736A8C348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57EBAA41-4ACC-4A0C-83F4-23D736A8C348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
