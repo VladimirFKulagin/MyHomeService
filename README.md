@@ -40,5 +40,9 @@ MyHome Service - это современное веб-приложение на 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [PostgreSQL 14+](https://www.postgresql.org/download/)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) или [VS Code](https://code.visualstudio.com/)
-
+- 
+<div align="center">
+  
 ![.NET Tests](https://github.com/VladimirFKulagin/MyHomeService/actions/workflows/dotnet_tests.yml/badge.svg)
+
+</div>
