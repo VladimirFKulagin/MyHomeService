@@ -1,45 +1,49 @@
-name: .NET Tests with Coverage
+name: .NET Tests
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 env:
   DOTNET_VERSION: '8.0.x'
 
 jobs:
   test:
-    name: Tests with Coverage
+    name: Run Tests & Report
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+      with:
+        fetch-depth: 0
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-    - name: Install dependencies
+
+    - name: Restore dependencies
       run: dotnet restore
-      
-    - name: Build solution
-      run: dotnet build --no-restore --configuration Release
-      
-    - name: Run tests with coverage
-      run: |
-        dotnet test \
-          --no-build \
-          --configuration Release \
-          --collect:"XPlat Code Coverage" \
-          --results-directory ./coverage
-          
-    - name: Upload coverage reports
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests with coverage and TRX logger
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage"
+
+    - name: Publish Unit Test Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: "**/TestResults/*.trx"
+        retention-days: 30
+
+    - name: Publish Coverage Reports
       uses: actions/upload-artifact@v4
       with:
         name: coverage-reports
-        path: coverage/**/*.xml
+        path: "**/coverage.cobertura.xml"
         retention-days: 30
