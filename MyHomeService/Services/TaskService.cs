@@ -20,7 +20,7 @@ namespace MyHomeService.Services
             return await _cache.GetOrCreateAsync("all_tasks", async entry =>
             {
                 entry.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5);
-                return await _context.TaskItems.ToListAsync();
+                return await _context.TaskItems.AsNoTracking().ToListAsync();
             }) ?? new List<TaskItem>();
         }
 
@@ -37,10 +37,16 @@ namespace MyHomeService.Services
         }
         public async Task UpdateTaskAsync(TaskItem task)
         {
-            _context.TaskItems.Update(task);
-            await _context.SaveChangesAsync();
-            _cache.Remove("all_tasks");
-            _cache.Remove("home_statistics");
+            var existingTask = await _context.TaskItems.FindAsync(task.Id);
+            if (existingTask != null)
+            {
+                existingTask.Title = task.Title;
+                existingTask.Description = task.Description;
+                existingTask.IsCompleted = task.IsCompleted;
+                await _context.SaveChangesAsync();
+                _cache.Remove("all_tasks");
+                _cache.Remove("home_statistics");
+            }
         }
         public async Task DeleteTaskAsync(int id)
         {
