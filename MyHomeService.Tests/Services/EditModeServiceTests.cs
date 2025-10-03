@@ -3,7 +3,7 @@ using MyHomeService.Services;
 
 namespace MyHomeService.Tests.Services
 {
-    public class EditModeServiceTest
+    public class EditModeServiceTests
     {
         [Fact]
         public void EditModeService_Constructor_SetIsEditModeToFalse()
